@@ -1,0 +1,138 @@
+#include <iostream>
+#include<cstring>
+using namespace std;
+struct Student
+{
+    long long sid;//学号 
+    char name[50];//姓名 
+    int grades[3];//分数3门 
+};
+Student students[1005];
+int n_students = 0;//学生数量 
+void insert_student() {//输入学生成绩 
+    long long sid;
+    cin >> sid;
+    int pos = 0;
+    while (pos < n_students && students[pos].sid != sid) pos++;//判断是否学号重复 ，学生总数 
+    Student& s = students[pos]; s.sid = sid;
+    for (int i = 0; i < 3; ++i) cin >> s.grades[i];
+    cin >> ws;// skip whitespace
+    cin.getline(s.name, 50);
+    if (pos < n_students) return;// 更新已存在的学生时并不增加学生总数
+    n_students++;
+}
+void change_student() {//修改学生信息 
+    long long sid;
+    cin >> sid;
+    int pos = 0;
+    while (pos < n_students && students[pos].sid != sid) pos++; 
+    if(pos<n_students){
+    Student& s = students[pos]; s.sid = sid;
+    for (int i = 0; i < 3; ++i) cin >> s.grades[i];
+    cin >> ws;
+    cin.getline(s.name, 50);
+    }
+    else{//不做操作随便放 
+        Student s;
+        for (int i = 0; i < 3; ++i) cin >> s.grades[i];
+        cin >> ws;
+        cin.getline(s.name, 50);
+    }
+
+}
+void destu(long long sid){//删除学生信息 
+    for(int i=0;i<n_students;i++){
+        if(students[i].sid==sid){
+            for(int j=i;j<n_students-1;j++){//将后面学生的信息前置一位 
+                students[j]=students[j+1];
+            }
+            n_students--;
+            break;
+        }
+    }
+}
+void fi(long long sid){//查找学号 
+    for(int i=0;i<n_students;i++){
+        if(students[i].sid==sid){
+            cout<<students[i].sid<<" "<<students[i].name<<" "<<students[i].grades[0]<<" "<<students[i].grades[1]<<" "<<students[i].grades[2]<<" "<<endl;
+            break;
+        }
+    }
+}
+void ffi(char n[]){//查找姓名 
+    for(int i=0;i<n_students;i++){
+        if(!strcmp(n,students[i].name)){//比较字符串是否相同 
+            cout<<students[i].sid<<" "<<students[i].name<<" "<<students[i].grades[0]<<" "<<students[i].grades[1]<<" "<<students[i].grades[2]<<" "<<endl;
+
+        }
+    }
+}
+void ssort(){//按学号升序 
+    Student temp;
+    for(int i=0;i<n_students;i++){
+        for(int j=0;j<n_students-i-1;j++){
+            if(students[j].sid>students[j+1].sid){
+                temp=students[j];
+                students[j]=students[j+1];
+                students[j+1]=temp;
+
+            }
+        }
+    }
+    for(int i=0;i<n_students;i++){
+        cout<<students[i].sid<<" "<<students[i].name<<" "<<students[i].grades[0]<<" "<<students[i].grades[1]<<" "<<students[i].grades[2]<<" "<<endl;
+    }
+}
+void sssort(){//按总分降序 
+    Student temp;
+    for(int i=0;i<n_students;i++){
+        for(int j=0;j<n_students-i-1;j++){
+            if((students[j].grades[0]+students[j].grades[1]+students[j].grades[2])<(students[j+1].grades[0]+students[j+1].grades[1]+students[j+1].grades[2])){
+                temp=students[j];
+                students[j]=students[j+1];
+                students[j+1]=temp;
+
+            }
+        }
+    }
+    for(int i=0;i<n_students;i++){//同分按照学号升序 
+        for(int j=0;j<n_students-i-1;j++){
+            if((students[j].grades[0]+students[j].grades[1]+students[j].grades[2])!=(students[j+1].grades[0]+students[j+1].grades[1]+students[j+1].grades[2]))continue;
+            if(students[j].sid>students[j+1].sid){
+                temp=students[j];
+                students[j]=students[j+1];
+                students[j+1]=temp;
+            }
+        }
+    }
+    for(int i=0;i<n_students;i++){
+        cout<<students[i].sid<<" "<<students[i].name<<" "<<students[i].grades[0]<<" "<<students[i].grades[1]<<" "<<students[i].grades[2]<<" "<<endl;
+    }
+}
+int main()
+{
+    char n[50];
+    int ca;
+    cin>>ca;
+    long long id;
+    while(ca!=0){
+        switch(ca){
+        case 1:insert_student();break;
+        case 2:change_student();break;
+        case 3:cin>>id;
+                destu(id);
+                break;
+        case 4:cin>>id;
+                fi(id);
+                break;
+        case 5:cin.get();
+                cin.getline(n,50);
+                ffi(n);break;
+        case 6:ssort();break;
+        case 7:sssort();break;
+        }
+        cin>>ca;
+    }
+
+    return 0;
+}
