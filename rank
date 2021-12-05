@@ -1,0 +1,46 @@
+#include <iostream>
+#include <algorithm>
+#include <cstring>
+using namespace std;
+
+bool sb(int a, int b)
+{
+    return a > b;
+}
+string* getRank(int score[100], int n) {
+    string* ans = new string[n];//static string ans[n] is also available.
+	int score2[n];
+    const string med[3] = {{"Gold Medal"},{"Silver Medal"},{"Bronze Medal"}};
+    for(int i = 0; i < n; i++)
+    {
+    	score2[i] = score[i];
+	}
+	sort(score2,score2+n,sb);
+	for(int i = 0; i < n; i++)
+	{
+		for(int j = 0; j < n; j++)
+		{
+			if(score[i] == score2[j])
+			{
+				if(j <= 2) {ans[i] = med[j];}
+				else {ans[i] = j + 1 + '0';}
+			}
+		}
+	}
+
+    return ans;
+}
+
+
+int main()
+{
+	int score[100], i = 0;
+	int n; cin >> n;
+	while (i!=n) cin >> score[i++];
+	string* ans = getRank(score, n);
+	for (int i = 0; i < n - 1; i++)
+		cout << ans[i] << ", ";
+	cout << ans[n - 1];
+    delete[] ans;
+	return 0;
+}
